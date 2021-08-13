@@ -38,6 +38,24 @@ app.get('/books',  function (req, res)  {
   
 });
 
+app.post('/rectandgle',  function (req, res){
+	res.setHeader('Content-Type', 'application/json');
+
+	var side1 = req.body.side1;
+	var side2 = req.body.side2;
+
+	res.send('{ "result ": ' + (side1*side2) +'}');
+
+});
+
+app.post('/circle',  function (req, res){
+	res.setHeader('Content-Type', 'application/json');
+
+	var radius = req.body.radius1;
+
+res.send('{ "result ": ' + (3.14*radius*radius) +'}');
+
+});
 
 app.get('/topsellers',  function (req, res)  {  
 
@@ -90,6 +108,26 @@ app.get('/lastorderid',  function (req, res)  {
 
 });
 
+
+app.get('/student/:studentid',  function (req, res)  {  
+  	
+	//Code Here
+	res.setHeader('Content-Type', 'application/json');
+	var studentid = req.params.studentid;
+	
+	var booksReference = db.ref("students");
+
+	//Attach an asynchronous callback to read the data
+	booksReference.orderByChild("studentid").equalTo(studentid).on("child_added", 
+				function(snapshot) {					
+					res.json(snapshot.val());
+					booksReference.off("value");
+					}, 
+				function (errorObject) {
+					res.send("The read failed: " + errorObject.code);
+				}); 
+
+});				
 
 app.put('/lastorderid',  function (req, res)  {  
 	
