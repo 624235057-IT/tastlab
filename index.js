@@ -37,6 +37,32 @@ app.get('/books',  function (req, res)  {
 				});
   
 });
+app.post('/student', function (req, res) {
+	var students = Number(req.body.students);
+	var studentid = req.body.studentId;
+	var studentname = req.body.studentName;
+
+	var referencePath = '/students/' + students + '/';
+	var studentsReference = db.ref(referencePath);
+
+
+	if (studentsReference != null) {
+
+		studentsReference.update({ studentid:studentid, studentname:studentname },
+			function (error) {
+				if (error) {
+					res.send("Data could not be saved." + error)
+				}
+				else {
+					res.send("Success!!");
+				}
+
+			}
+
+		);
+	}
+
+});
 
 app.post('/rectandgle',  function (req, res){
 	res.setHeader('Content-Type', 'application/json');
@@ -54,6 +80,20 @@ app.post('/circle',  function (req, res){
 	var radius = req.body.radius1;
 
 res.send('{ "result ": ' + (3.14*radius*radius) +'}');
+
+});
+
+app.delete('/student/:students', function (req, res){
+	
+	var students = req.params.students;
+
+	var referencePath = '/students/' + students + '/';
+	var studentsReference = db.ref(referencePath);
+	if (studentsReference != null){
+		studentsReference.remove()
+		res.send("Succrss!!")
+	}
+	if (error) throw error;
 
 });
 
